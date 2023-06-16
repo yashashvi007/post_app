@@ -1,7 +1,7 @@
-import { Text, View , FlatList } from 'react-native'
+import { Text, View , FlatList, TextBase, TextInputBase } from 'react-native'
 import React, { Component } from 'react'
-import { ActivityIndicator, Searchbar } from 'react-native-paper';
-import CardComponent from './components/Card';
+import { ActivityIndicator, Searchbar, TextInput } from 'react-native-paper';
+import CardComponent from '../components/Card';
 
 
 type MyProps = {
@@ -19,7 +19,8 @@ type post = {
 type MyState = {
   posts : post[]  , 
   pageNo : number , 
-  searchText : string 
+  searchText : string  , 
+  filteredPosts : post[]
 };
 
 
@@ -30,7 +31,8 @@ export default class Home extends Component<MyProps , MyState> {
         this.state = {
               posts : [] ,
               pageNo : 0 , 
-              searchText : ''
+              searchText : '',
+              filteredPosts : []
         }
       }
  
@@ -53,9 +55,11 @@ export default class Home extends Component<MyProps , MyState> {
           onChangeText={this.onChangeSearch}
           value={this.state.searchText}
           />
+         
+        
         <FlatList
           data={this.state.posts}
-          keyExtractor={(item)=> item.objectId}
+          keyExtractor={(item)=> item?.objectId}
           renderItem={this.renderItems}
           ListFooterComponent={this.renderLoader}
           onEndReached={this.getPosts}
@@ -82,14 +86,14 @@ export default class Home extends Component<MyProps , MyState> {
   }
 
   getPosts = ()=>{
-    if(this.state.pageNo < 51){
+   
       fetch(`https://hn.algolia.com/api/v1/search_by_date?tags=story&page=${this.state.pageNo}`)
      .then(res => res.json())            
      .then(data=> this.setState({posts : [...this.state.posts, ...data.hits]} , ()=> {console.log(this.state.posts.length)}))
     
       
      this.setState({pageNo : this.state.pageNo + 1})
-    }
+   
  }
 
  renderLoader = ()=>{
@@ -98,3 +102,4 @@ export default class Home extends Component<MyProps , MyState> {
     )
  }
 }
+
