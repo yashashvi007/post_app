@@ -58,7 +58,7 @@ export default class Home extends Component<MyProps , MyState> {
          
         
         <FlatList
-          data={this.state.posts}
+          data={this.state.filteredPosts}
           keyExtractor={(item)=> item?.objectId}
           renderItem={this.renderItems}
           ListFooterComponent={this.renderLoader}
@@ -74,15 +74,22 @@ export default class Home extends Component<MyProps , MyState> {
         searchText : query
      })
 
-     this.setState({
-        posts : this.state.posts.filter(post => {
-            if (this.state.searchText === "") {
-              return post;
-            } else if (post.title.toLowerCase().includes(this.state.searchText.toLowerCase()) || post.author.toLowerCase().includes(this.state.searchText.toLowerCase())) {
-              return post;
-            }
-          })
-     })
+     const filteredData = this.state.posts.filter((post : post)=> post.title.toLowerCase().includes(this.state.searchText.toLowerCase()) || post.author.toLowerCase().includes(this.state.searchText.toLowerCase()) )
+      console.log(filteredData);
+      this.setState({
+      filteredPosts : filteredData
+      }
+    )
+
+    //  this.setState({
+    //     posts : this.state.posts.filter(post => {
+    //         if (this.state.searchText === "") {
+    //           return post;
+    //         } else if (post.title.toLowerCase().includes(this.state.searchText.toLowerCase()) || post.author.toLowerCase().includes(this.state.searchText.toLowerCase())) {
+    //           return post;
+    //         }
+    //       })
+    //  })
   }
 
   getPosts = ()=>{
