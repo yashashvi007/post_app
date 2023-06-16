@@ -59,7 +59,7 @@ export default class Home extends Component<MyProps , MyState> {
         
         <FlatList
           data={this.state.filteredPosts}
-          keyExtractor={(item)=> item?.objectId}
+          keyExtractor={(item)=> item.objectId}
           renderItem={this.renderItems}
           ListFooterComponent={this.renderLoader}
           onEndReached={this.getPosts}
